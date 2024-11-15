@@ -1,6 +1,6 @@
 import { Column, Entity, ObjectIdColumn } from "typeorm";
 
-@Entity()
+@Entity({ database: 'mongodb'})
 export class User{
     @ObjectIdColumn()
     id: string;
