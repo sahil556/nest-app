@@ -13,6 +13,12 @@ export class UsersController {
         return this.usersService.findAllUsers();
     }
 
+    @Get(':username')
+    findUserById(@Param('username')username: string): Promise<User>
+    {
+        return this.usersService.findOne(username);
+    }
+
     @Post()
     createUser(@Body() userDto: CreateUserDto)
     {
