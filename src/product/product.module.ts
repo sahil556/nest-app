@@ -8,9 +8,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { ProductController } from './product.controller';
 import { CqrsModule } from '@nestjs/cqrs';
+import { MongoModule } from 'src/database/mongo.module';
 
 @Module({
-    imports:[TypeOrmModule.forFeature([Product]), CqrsModule],
+    imports:[MongoModule, TypeOrmModule.forFeature([Product]), CqrsModule],
     controllers:[ProductController],
     providers: [CreateProductHandler, ListProduct, DeleteProductHandler, UpdateProductHandler, ProductByIdHandler]
 })

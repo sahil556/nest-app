@@ -5,7 +5,10 @@ import { getMetadataArgsStorage } from "typeorm";
 
 @Module({
     imports:[
-        ConfigModule,
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: `.env`
+        }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             useFactory: async (configService: ConfigService) => {
