@@ -6,6 +6,8 @@ import { ProductController } from './product/product.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 import { Product } from './product/entities/product.entity';
 import { ProductModule } from './product/product.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -14,7 +16,7 @@ import { ProductModule } from './product/product.module';
       synchronize: true,
       logging: true,
       entities: [Product],
-  }), ProductModule],
+  }), ProductModule, AuthModule, UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
