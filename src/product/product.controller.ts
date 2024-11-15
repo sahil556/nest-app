@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateProductCommand } from './cqrs/commands/create-product.command';
-import { ListProduct } from './cqrs/handlers/list-product-handler';
 import { GetProductsQuery } from './cqrs/queries/get-products.query';
+import { NotFoundError } from 'rxjs';
 
 @Controller('product')
 export class ProductController {
@@ -13,12 +13,20 @@ export class ProductController {
     @Post()
     async create(@Body('name') name: string, @Body('description') description: string, @Body('price') price: number)
     {
+        console.log(name, description, price);
         return this.commandBus.execute(new CreateProductCommand(name, description, price))
     }
 
     @Get()
     async getallProducts()
     {
-        return this.commandBus.execute(new GetProductsQuery());
+        try{
+        return this.queryBus.execute(new GetProductsQuery());
+        }
+        catch(err)
+        {
+            console.log(err)
+            throw new NotFoundException();
+        }
     }
 }

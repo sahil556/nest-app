@@ -2,11 +2,12 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CreateProductCommand } from "../commands/create-product.command";
 import { Repository } from "typeorm";
 import { Product } from "src/product/entities/product.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @CommandHandler(CreateProductCommand)
 export class CreateProductHandler implements ICommandHandler<CreateProductCommand>
 {
-    constructor(private readonly productRepository: Repository<Product>)
+    constructor(@InjectRepository(Product) private readonly productRepository: Repository<Product>)
     {
 
     }

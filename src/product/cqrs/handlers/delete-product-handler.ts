@@ -2,11 +2,12 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DeleteProductCommand } from "../commands/delete-product.command";
 import { Repository } from "typeorm";
 import { Product } from "src/product/entities/product.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @CommandHandler(DeleteProductCommand)
 export class DeleteProductHandler implements ICommandHandler<DeleteProductCommand>{
 
-    constructor(private readonly productReposity: Repository<Product>)
+    constructor(@InjectRepository(Product) private readonly productReposity: Repository<Product>)
     {
         
     }
