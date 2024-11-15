@@ -8,6 +8,8 @@ import { ListProduct } from './product/cqrs/handlers/list-product-handler';
 import { DeleteProductHandler } from './product/cqrs/handlers/delete-product-handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { Product } from './product/entities/product.entity';
+import { UpdateProductHandler } from './product/cqrs/handlers/update-product-handler';
+import { ProductByIdHandler } from './product/cqrs/handlers/product-by-id-handler';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Product]),TypeOrmModule.forRoot({
@@ -18,6 +20,6 @@ import { Product } from './product/entities/product.entity';
       entities: [Product],
   }), CqrsModule],
   controllers: [AppController, ProductController],
-  providers: [AppService, CreateProductHandler, ListProduct, DeleteProductHandler],
+  providers: [AppService, CreateProductHandler, ListProduct, DeleteProductHandler, UpdateProductHandler, ProductByIdHandler],
 })
 export class AppModule {}
