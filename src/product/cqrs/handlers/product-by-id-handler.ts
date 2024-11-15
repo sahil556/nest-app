@@ -9,7 +9,7 @@ export class ProductByIdHandler implements IQueryHandler<GetProductByIdQuery>{
 
     constructor(@InjectRepository(Product) private readonly productRepo: Repository<Product>){}
 
-    execute(query: GetProductByIdQuery): Promise<any> {
+    execute(query: GetProductByIdQuery): Promise<Product> {
         const { id } = query;
         return this.productRepo.findOneBy({id});
     }

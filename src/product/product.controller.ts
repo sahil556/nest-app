@@ -1,10 +1,11 @@
-import { Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateProductCommand } from './cqrs/commands/create-product.command';
 import { GetProductsQuery } from './cqrs/queries/get-products.query';
 import { NotFoundError } from 'rxjs';
 import { UpdateProductCommand } from './cqrs/commands/update-product.command';
 import { GetProductByIdQuery } from './cqrs/queries/get-product-by-id.query';
+import { DeleteProductCommand } from './cqrs/commands/delete-product.command';
 
 @Controller('product')
 export class ProductController {
@@ -39,15 +40,21 @@ export class ProductController {
     }
 
     @Get(':id')
-    async getProductById(@Param('id', ParseIntPipe) id: number)
+    async getProductById(@Param('id') id: number)
     {
         try{
-            this.queryBus.execute(new GetProductByIdQuery(id));
+            return this.queryBus.execute(new GetProductByIdQuery(id));
         }
         catch(err)
         {
             console.log(err)
             throw new NotFoundException();
         }
+    }
+
+    @Delete(':id')
+    async deleteProductById(@Param('id') id: number)
+    {
+        return this.commandBus.execute(new DeleteProductCommand(id));
     }
 }
