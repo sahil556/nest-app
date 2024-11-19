@@ -9,9 +9,10 @@ import { ProductModule } from './product/product.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MongoModule } from './database/mongo.module';
+import { StreamModule } from './stream/stream.module';
 
 @Module({
-  imports: [ProductModule, AuthModule, UsersModule],
+  imports: [ProductModule, AuthModule, UsersModule, StreamModule],
   controllers: [AppController],
   providers: [AppService],
 })
