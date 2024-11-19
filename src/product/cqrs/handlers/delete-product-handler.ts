@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { DeleteProductCommand } from "../commands/delete-product.command";
 import { Repository } from "typeorm";
-import { Product } from "src/product/entities/product.entity";
+import { Product } from "src/entities/product.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @CommandHandler(DeleteProductCommand)

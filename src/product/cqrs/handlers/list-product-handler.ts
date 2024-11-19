@@ -1,7 +1,7 @@
 import { ICommandHandler, IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { GetProductsQuery } from "../queries/get-products.query";
 import { Repository } from "typeorm";
-import { Product } from "src/product/entities/product.entity";
+import { Product } from "src/entities/product.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @QueryHandler(GetProductsQuery)

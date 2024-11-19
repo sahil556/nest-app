@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductController } from './product/product.controller';
 import { CqrsModule } from '@nestjs/cqrs';
-import { Product } from './product/entities/product.entity';
+import { Product } from './entities/product.entity';
 import { ProductModule } from './product/product.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
