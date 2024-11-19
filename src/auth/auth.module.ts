@@ -22,6 +22,6 @@ import { AuthGuard } from './auth.guard';
       signOptions: {expiresIn: '8h'}
     })
   ],
-  exports: [AuthGuard]
+  exports: [AuthGuard, JwtModule]
 })
 export class AuthModule {}

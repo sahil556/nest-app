@@ -1,9 +1,12 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { IS_PUBLIC_KEY } from './public-strategy';
+import { Socket } from 'socket.io';
+import { Handshake } from 'socket.io/dist/socket-types';
+import { verify } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,8 +26,14 @@ export class AuthGuard implements CanActivate {
     if(isPublic)
       return true;
 
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    // of Type Request | HandShake
+    const request = context.getType() !== 'ws' ? context.switchToHttp().getRequest() : context.switchToWs().getClient().handshake;
+    const token = AuthGuard.extractTokenFromHeader(request);
+
+    const { authorization } = request.headers;
+
+    Logger.log({authorization}, 'I got the Auth for')
+    Logger.log(context.getType())
 
     if(!token)
     {
@@ -42,8 +51,23 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  extractTokenFromHeader(request: Request): string | undefined {
+  static extractTokenFromHeader(request: Request | Handshake): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
+  }
+
+  static async validateToken(client: Socket)
+  {
+    Logger.log('validating Token...')
+    console.log('validating token')
+    const token = AuthGuard.extractTokenFromHeader(client.handshake);
+    try{
+    const payload = verify(token, process.env.AUTH_SECRET);
+    return payload;
+    }
+    catch
+    {
+      throw new UnauthorizedException();
+    }
   }
 }

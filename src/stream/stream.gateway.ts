@@ -1,5 +1,8 @@
+import { Logger, UseGuards } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import { AuthGuard } from "src/auth/auth.guard";
+import { SocketAuthMiddleware } from "src/auth/ws.middleware";
 
 
 @WebSocketGateway({
@@ -9,10 +12,19 @@ import { Server, Socket } from "socket.io";
         credentials: true
     }
 })
+@UseGuards(AuthGuard)
 export class StreamGateway{
 
     @WebSocketServer()
     server: Server
+
+    afterInit(socket: Socket)
+    {
+        // if we remove below middle ware client still be able to connect and listen messages broadcasted from server
+        // only it will not be able to send / invoke messages to server due to AuthGuard
+        socket.use(SocketAuthMiddleware() as any);
+        console.log('after init')
+    }
 
     @SubscribeMessage('join_room')
     async joinRoom(@MessageBody() roomName: string, @ConnectedSocket() socket: Socket)
