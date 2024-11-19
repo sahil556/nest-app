@@ -55,19 +55,4 @@ export class AuthGuard implements CanActivate {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
-
-  static async validateToken(client: Socket)
-  {
-    Logger.log('validating Token...')
-    console.log('validating token')
-    const token = AuthGuard.extractTokenFromHeader(client.handshake);
-    try{
-    const payload = verify(token, process.env.AUTH_SECRET);
-    return payload;
-    }
-    catch
-    {
-      throw new UnauthorizedException();
-    }
-  }
 }
